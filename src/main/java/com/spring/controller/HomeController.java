@@ -33,10 +33,10 @@ import com.spring.service.TransactionService;
 @RestController
 @SessionAttributes("userInSession")
 public class HomeController {
-	
+
 	@Autowired
 	TransactionService userService;
-	
+
 	@Autowired
 	CustomerService custService;
 
@@ -51,7 +51,7 @@ public class HomeController {
 
 	@GetMapping(value = "/transaction/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Transaction> getUser(@PathVariable("id") int id) {
-		
+
 		Transaction user = userService.findById(id);
 		if (user == null) {
 			System.out.println("User with id " + id + " not found");
@@ -67,9 +67,9 @@ public class HomeController {
 		headers.setLocation(ucBuilder.path("/transaction/{id}").buildAndExpand(user.getTransactionId()).toUri());
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
-	
+
 //	---------------------------------Customer work starts from below ---------------------------------------
-	
+
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public ResponseEntity<Void> createCustomer(@RequestBody Customer cust, UriComponentsBuilder ucBuilder,HttpServletRequest req) {
 		custService.saveCustomer(cust);
@@ -77,7 +77,7 @@ public class HomeController {
 		headers.setLocation(ucBuilder.path("/customer/{id}").buildAndExpand(cust.getCustomerId()).toUri());
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
-	
+
 	@RequestMapping(value = { "/login" }, method = RequestMethod.POST)
 	public ResponseEntity<Void> processLoginHtmlCredentials(@RequestBody Login login,UriComponentsBuilder ucBuilder,
 		HttpServletRequest req, Model model) {
@@ -86,23 +86,31 @@ public class HomeController {
 		cust.setName(login.getName());
 		System.out.println(login.getName());
 		System.out.println(login.getPassword());
+		System.out.println("some testing on github");
 		cust.setPassword(login.getPassword());
 
 		if (custService.findCustomer(cust)) {
 			HttpHeaders headers = new HttpHeaders();
 			headers.setLocation(ucBuilder.path("/customer/{id}").buildAndExpand(cust.getCustomerId()).toUri());
 			return new ResponseEntity<Void>(headers, HttpStatus.OK);
-			
+
 
 		}
 
-		return new ResponseEntity<Void>(HttpStatus.NOT_FOUND); 
+		return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
 	}
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
 	
 }
